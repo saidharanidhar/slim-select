@@ -683,9 +683,20 @@ var SlimSelect = (function () {
             }
         }
         multipleValue(option) {
+            var _a;
             const value = document.createElement('div');
             value.classList.add(this.classes.value);
             value.dataset.id = option.id;
+            if ((_a = option.data) === null || _a === void 0 ? void 0 : _a.htmlMulti) {
+                value.innerHTML = option.data.htmlMulti;
+                const deleteDiv = value.querySelector('.ss-value-delete');
+                if (deleteDiv) {
+                    deleteDiv.addEventListener('click', (e) => {
+                        this.multiValueDeleteHandler(e, option);
+                    });
+                }
+                return value;
+            }
             const text = document.createElement('div');
             text.classList.add(this.classes.valueText);
             text.textContent = option.text;
@@ -694,43 +705,7 @@ var SlimSelect = (function () {
                 const deleteDiv = document.createElement('div');
                 deleteDiv.classList.add(this.classes.valueDelete);
                 deleteDiv.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (this.settings.disabled) {
-                        return;
-                    }
-                    let shouldDelete = true;
-                    const before = this.store.getSelectedOptions();
-                    const after = before.filter((o) => {
-                        return o.selected && o.id !== option.id;
-                    }, true);
-                    if (this.settings.minSelected && after.length < this.settings.minSelected) {
-                        return;
-                    }
-                    if (this.callbacks.beforeChange) {
-                        shouldDelete = this.callbacks.beforeChange(after, before) === true;
-                    }
-                    if (shouldDelete) {
-                        let selectedIds = [];
-                        for (const o of after) {
-                            if (o instanceof Optgroup) {
-                                for (const c of o.options) {
-                                    selectedIds.push(c.id);
-                                }
-                            }
-                            if (o instanceof Option) {
-                                selectedIds.push(o.id);
-                            }
-                        }
-                        this.callbacks.setSelected(selectedIds, false);
-                        if (this.settings.closeOnSelect) {
-                            this.callbacks.close();
-                        }
-                        if (this.callbacks.afterChange) {
-                            this.callbacks.afterChange(after);
-                        }
-                        this.updateDeselectAll();
-                    }
+                    this.multiValueDeleteHandler(e, option);
                 };
                 const deleteSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                 deleteSvg.setAttribute('viewBox', '0 0 100 100');
@@ -741,6 +716,45 @@ var SlimSelect = (function () {
                 value.appendChild(deleteDiv);
             }
             return value;
+        }
+        multiValueDeleteHandler(e, option) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.settings.disabled) {
+                return;
+            }
+            let shouldDelete = true;
+            const before = this.store.getSelectedOptions();
+            const after = before.filter((o) => {
+                return o.selected && o.id !== option.id;
+            }, true);
+            if (this.settings.minSelected && after.length < this.settings.minSelected) {
+                return;
+            }
+            if (this.callbacks.beforeChange) {
+                shouldDelete = this.callbacks.beforeChange(after, before) === true;
+            }
+            if (shouldDelete) {
+                let selectedIds = [];
+                for (const o of after) {
+                    if (o instanceof Optgroup) {
+                        for (const c of o.options) {
+                            selectedIds.push(c.id);
+                        }
+                    }
+                    if (o instanceof Option) {
+                        selectedIds.push(o.id);
+                    }
+                }
+                this.callbacks.setSelected(selectedIds, false);
+                if (this.settings.closeOnSelect) {
+                    this.callbacks.close();
+                }
+                if (this.callbacks.afterChange) {
+                    this.callbacks.afterChange(after);
+                }
+                this.updateDeselectAll();
+            }
         }
         contentDiv() {
             const main = document.createElement('div');

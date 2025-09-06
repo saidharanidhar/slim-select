@@ -1,6 +1,6 @@
-import Settings from './settings';
 import Store, { DataArray, Option, OptionOptional } from './store';
 import CssClasses from './classes';
+import Settings from './settings';
 export interface Callbacks {
     open: () => void;
     close: () => void;
@@ -59,6 +59,7 @@ export default class Render {
     private renderSingleValue;
     private renderMultipleValues;
     multipleValue(option: Option): HTMLDivElement;
+    multiValueDeleteHandler(e: Event, option: Option): void;
     contentDiv(): Content;
     moveContent(): void;
     searchDiv(): Search;
