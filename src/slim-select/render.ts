@@ -1,7 +1,8 @@
-import { debounce } from './helpers'
-import Settings from './settings'
 import Store, { DataArray, Optgroup, Option, OptionOptional } from './store'
+
 import CssClasses from './classes'
+import Settings from './settings'
+import { debounce } from './helpers'
 
 export interface Callbacks {
   open: () => void
@@ -507,6 +508,17 @@ export default class Render {
     value.classList.add(this.classes.value)
     value.dataset.id = option.id
 
+    if (option.data?.htmlMulti) {
+      value.innerHTML = option.data.htmlMulti
+      const deleteDiv = value.querySelector('.ss-value-delete')
+      if (deleteDiv) {
+        deleteDiv.addEventListener('click', (e: Event) => {
+          this.multiValueDeleteHandler(e, option)
+        })
+      }
+      return value
+    }
+
     const text = document.createElement('div')
     text.classList.add(this.classes.valueText)
     text.textContent = option.text // For multiple values always use text
@@ -520,59 +532,7 @@ export default class Render {
 
       // Add delete onclick event
       deleteDiv.onclick = (e: Event) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        // Dont do anything if disabled
-        if (this.settings.disabled) {
-          return
-        }
-
-        // By Default we will delete
-        let shouldDelete = true
-        const before = this.store.getSelectedOptions()
-        const after = before.filter((o) => {
-          return o.selected && o.id !== option.id
-        }, true)
-
-        // Check if minSelected is set and if after length so, return
-        if (this.settings.minSelected && after.length < this.settings.minSelected) {
-          return
-        }
-
-        // If there is a beforeDeselect function run it
-        if (this.callbacks.beforeChange) {
-          shouldDelete = this.callbacks.beforeChange(after, before) === true
-        }
-
-        if (shouldDelete) {
-          // Loop through after and append ids to a variable called selected
-          let selectedIds: string[] = []
-          for (const o of after) {
-            if (o instanceof Optgroup) {
-              for (const c of o.options) {
-                selectedIds.push(c.id)
-              }
-            }
-
-            if (o instanceof Option) {
-              selectedIds.push(o.id)
-            }
-          }
-          this.callbacks.setSelected(selectedIds, false)
-
-          // Check if we need to close the dropdown
-          if (this.settings.closeOnSelect) {
-            this.callbacks.close()
-          }
-
-          // Run afterChange callback
-          if (this.callbacks.afterChange) {
-            this.callbacks.afterChange(after)
-          }
-
-          this.updateDeselectAll()
-        }
+        this.multiValueDeleteHandler(e, option)
       }
 
       // Add delete svg
@@ -587,6 +547,62 @@ export default class Render {
     }
 
     return value
+  }
+
+  public multiValueDeleteHandler(e: Event, option: Option): void {
+    e.preventDefault()
+    e.stopPropagation()
+
+    // Dont do anything if disabled
+    if (this.settings.disabled) {
+      return
+    }
+
+    // By Default we will delete
+    let shouldDelete = true
+    const before = this.store.getSelectedOptions()
+    const after = before.filter((o) => {
+      return o.selected && o.id !== option.id
+    }, true)
+
+    // Check if minSelected is set and if after length so, return
+    if (this.settings.minSelected && after.length < this.settings.minSelected) {
+      return
+    }
+
+    // If there is a beforeDeselect function run it
+    if (this.callbacks.beforeChange) {
+      shouldDelete = this.callbacks.beforeChange(after, before) === true
+    }
+
+    if (shouldDelete) {
+      // Loop through after and append ids to a variable called selected
+      let selectedIds: string[] = []
+      for (const o of after) {
+        if (o instanceof Optgroup) {
+          for (const c of o.options) {
+            selectedIds.push(c.id)
+          }
+        }
+
+        if (o instanceof Option) {
+          selectedIds.push(o.id)
+        }
+      }
+      this.callbacks.setSelected(selectedIds, false)
+
+      // Check if we need to close the dropdown
+      if (this.settings.closeOnSelect) {
+        this.callbacks.close()
+      }
+
+      // Run afterChange callback
+      if (this.callbacks.afterChange) {
+        this.callbacks.afterChange(after)
+      }
+
+      this.updateDeselectAll()
+    }
   }
 
   public contentDiv(): Content {
