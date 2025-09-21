@@ -257,7 +257,7 @@ export default class Render {
       // By Default we will delete
       let shouldDelete = true
       const before = this.store.getSelectedOptions()
-      const after = [] as Option[]
+      const after = this.store.getDataOptions().filter(i => i.mandatory) as Option[]
 
       // Add beforeChange callback
       if (this.callbacks.beforeChange) {
@@ -266,7 +266,7 @@ export default class Render {
 
       if (shouldDelete) {
         if (this.settings.isMultiple) {
-          this.callbacks.setSelected([], false)
+          this.callbacks.setSelected(after.map(i => i.id), false)
           this.updateDeselectAll()
         } else {
           // Get first option and set it as selected

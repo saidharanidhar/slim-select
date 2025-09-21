@@ -496,13 +496,13 @@ var SlimSelect = (function () {
                 }
                 let shouldDelete = true;
                 const before = this.store.getSelectedOptions();
-                const after = [];
+                const after = this.store.getDataOptions().filter(i => i.mandatory);
                 if (this.callbacks.beforeChange) {
                     shouldDelete = this.callbacks.beforeChange(after, before) === true;
                 }
                 if (shouldDelete) {
                     if (this.settings.isMultiple) {
-                        this.callbacks.setSelected([], false);
+                        this.callbacks.setSelected(after.map(i => i.id), false);
                         this.updateDeselectAll();
                     }
                     else {
