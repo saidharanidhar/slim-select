@@ -31,5 +31,6 @@ export default class Settings {
     maxValuesShown: number;
     maxValuesMessage: string;
     addableText: string;
+    customIsAlignRight: boolean;
     constructor(settings?: SettingsPartial);
 }

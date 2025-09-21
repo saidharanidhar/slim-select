@@ -1381,6 +1381,12 @@ export default class Render {
     this.content.main.style.left =
       containerRect.left + (this.settings.contentPosition === 'fixed' ? 0 : window.scrollX) + 'px'
     this.content.main.style.width = containerRect.width + 'px'
+
+    if (this.settings.customIsAlignRight) {
+        const marginLeftImp =
+          -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width)
+        this.content.main.style.marginLeft = marginLeftImp + 'px'
+    }
   }
 
   public moveContentBelow(): void {
@@ -1403,6 +1409,12 @@ export default class Render {
       this.content.main.style.left =
         containerRect.left + (this.settings.contentPosition === 'fixed' ? 0 : window.scrollX) + 'px'
       this.content.main.style.width = containerRect.width + 'px'
+
+      if (this.settings.customIsAlignRight) {
+        const marginLeftImp =
+          -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width)
+        this.content.main.style.marginLeft = marginLeftImp + 'px'
+      }
     }
   }
 

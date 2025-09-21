@@ -1293,6 +1293,10 @@ var SlimSelect = (function () {
             this.content.main.style.left =
                 containerRect.left + (this.settings.contentPosition === 'fixed' ? 0 : window.scrollX) + 'px';
             this.content.main.style.width = containerRect.width + 'px';
+            if (this.settings.customIsAlignRight) {
+                const marginLeftImp = -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width);
+                this.content.main.style.marginLeft = marginLeftImp + 'px';
+            }
         }
         moveContentBelow() {
             this.main.main.classList.remove(this.classes.openAbove);
@@ -1310,6 +1314,10 @@ var SlimSelect = (function () {
                 this.content.main.style.left =
                     containerRect.left + (this.settings.contentPosition === 'fixed' ? 0 : window.scrollX) + 'px';
                 this.content.main.style.width = containerRect.width + 'px';
+                if (this.settings.customIsAlignRight) {
+                    const marginLeftImp = -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width);
+                    this.content.main.style.marginLeft = marginLeftImp + 'px';
+                }
             }
         }
         ensureElementInView(container, element) {
@@ -1672,6 +1680,7 @@ var SlimSelect = (function () {
             this.isOpen = false;
             this.isFullOpen = false;
             this.intervalMove = null;
+            this.customIsAlignRight = false;
             if (!settings) {
                 settings = {};
             }
@@ -1702,6 +1711,7 @@ var SlimSelect = (function () {
             this.maxValuesShown = settings.maxValuesShown || 20;
             this.maxValuesMessage = settings.maxValuesMessage || '{number} selected';
             this.addableText = settings.addableText || 'Press "Enter" to add {value}';
+            this.customIsAlignRight = settings.customIsAlignRight || false;
         }
     }
 

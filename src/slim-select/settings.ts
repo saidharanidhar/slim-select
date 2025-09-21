@@ -38,6 +38,7 @@ export default class Settings {
   public maxValuesShown: number
   public maxValuesMessage: string
   public addableText: string
+  public customIsAlignRight: boolean = false
 
   constructor(settings?: SettingsPartial) {
     if (!settings) {
@@ -72,5 +73,6 @@ export default class Settings {
     this.maxValuesShown = settings.maxValuesShown || 20
     this.maxValuesMessage = settings.maxValuesMessage || '{number} selected'
     this.addableText = settings.addableText || 'Press "Enter" to add {value}'
+    this.customIsAlignRight = settings.customIsAlignRight || false
   }
 }
