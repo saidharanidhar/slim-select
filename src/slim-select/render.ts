@@ -257,7 +257,7 @@ export default class Render {
       // By Default we will delete
       let shouldDelete = true
       const before = this.store.getSelectedOptions()
-      const after = this.store.getDataOptions().filter(i => i.mandatory) as Option[]
+      const after = this.store.getDataOptions().filter((i) => i.mandatory) as Option[]
 
       // Add beforeChange callback
       if (this.callbacks.beforeChange) {
@@ -266,7 +266,10 @@ export default class Render {
 
       if (shouldDelete) {
         if (this.settings.isMultiple) {
-          this.callbacks.setSelected(after.map(i => i.id), false)
+          this.callbacks.setSelected(
+            after.map((i) => i.id),
+            false
+          )
           this.updateDeselectAll()
         } else {
           // Get first option and set it as selected
@@ -1383,9 +1386,9 @@ export default class Render {
     this.content.main.style.width = containerRect.width + 'px'
 
     if (this.settings.customIsAlignRight) {
-        const marginLeftImp =
-          -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width)
-        this.content.main.style.marginLeft = marginLeftImp + 'px'
+        this.content.main.style.left = '';
+        const right = document.documentElement.clientWidth - this.main.main.getBoundingClientRect().right;
+        this.content.main.style.right = right + 'px'
     }
   }
 
@@ -1411,11 +1414,11 @@ export default class Render {
       this.content.main.style.width = containerRect.width + 'px'
 
       if (this.settings.customIsAlignRight) {
-        const marginLeftImp =
-          -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width)
-        this.content.main.style.marginLeft = marginLeftImp + 'px'
+        this.content.main.style.left = '';
+        const right = document.documentElement.clientWidth - this.main.main.getBoundingClientRect().right;
+        this.content.main.style.right = right + 'px'
       }
-    }
+    }    
   }
 
   public ensureElementInView(container: HTMLElement, element: HTMLElement): void {

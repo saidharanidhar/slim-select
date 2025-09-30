@@ -499,13 +499,13 @@
                 }
                 let shouldDelete = true;
                 const before = this.store.getSelectedOptions();
-                const after = this.store.getDataOptions().filter(i => i.mandatory);
+                const after = this.store.getDataOptions().filter((i) => i.mandatory);
                 if (this.callbacks.beforeChange) {
                     shouldDelete = this.callbacks.beforeChange(after, before) === true;
                 }
                 if (shouldDelete) {
                     if (this.settings.isMultiple) {
-                        this.callbacks.setSelected(after.map(i => i.id), false);
+                        this.callbacks.setSelected(after.map((i) => i.id), false);
                         this.updateDeselectAll();
                     }
                     else {
@@ -1297,8 +1297,9 @@
                 containerRect.left + (this.settings.contentPosition === 'fixed' ? 0 : window.scrollX) + 'px';
             this.content.main.style.width = containerRect.width + 'px';
             if (this.settings.customIsAlignRight) {
-                const marginLeftImp = -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width);
-                this.content.main.style.marginLeft = marginLeftImp + 'px';
+                this.content.main.style.left = '';
+                const right = document.documentElement.clientWidth - this.main.main.getBoundingClientRect().right;
+                this.content.main.style.right = right + 'px';
             }
         }
         moveContentBelow() {
@@ -1318,8 +1319,9 @@
                     containerRect.left + (this.settings.contentPosition === 'fixed' ? 0 : window.scrollX) + 'px';
                 this.content.main.style.width = containerRect.width + 'px';
                 if (this.settings.customIsAlignRight) {
-                    const marginLeftImp = -1 * (this.content.main.getBoundingClientRect().width - this.main.main.getBoundingClientRect().width);
-                    this.content.main.style.marginLeft = marginLeftImp + 'px';
+                    this.content.main.style.left = '';
+                    const right = document.documentElement.clientWidth - this.main.main.getBoundingClientRect().right;
+                    this.content.main.style.right = right + 'px';
                 }
             }
         }
