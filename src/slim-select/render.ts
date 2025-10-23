@@ -1258,6 +1258,9 @@ export default class Render {
 
       // If the option is disabled or selected and the user isnt allowed to deselect
       if (option.disabled || (option.selected && !this.settings.allowDeselect)) {
+        if (this.settings.closeOnSelect && this.settings.closeOnAlreadySelected) {
+          this.callbacks.close()
+        }
         return
       }
 

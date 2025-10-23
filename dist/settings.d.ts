@@ -32,5 +32,6 @@ export default class Settings {
     maxValuesMessage: string;
     addableText: string;
     customIsAlignRight: boolean;
+    closeOnAlreadySelected: boolean;
     constructor(settings?: SettingsPartial);
 }

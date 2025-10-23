@@ -1211,6 +1211,9 @@ class Render {
             const element = e.currentTarget;
             const elementID = String(element.dataset.id);
             if (option.disabled || (option.selected && !this.settings.allowDeselect)) {
+                if (this.settings.closeOnSelect && this.settings.closeOnAlreadySelected) {
+                    this.callbacks.close();
+                }
                 return;
             }
             if ((this.settings.isMultiple && this.settings.maxSelected <= selectedOptions.length && !option.selected) ||
@@ -1682,6 +1685,7 @@ class Settings {
         this.isFullOpen = false;
         this.intervalMove = null;
         this.customIsAlignRight = false;
+        this.closeOnAlreadySelected = false;
         if (!settings) {
             settings = {};
         }
@@ -1713,6 +1717,7 @@ class Settings {
         this.maxValuesMessage = settings.maxValuesMessage || '{number} selected';
         this.addableText = settings.addableText || 'Press "Enter" to add {value}';
         this.customIsAlignRight = settings.customIsAlignRight || false;
+        this.closeOnAlreadySelected = settings.closeOnAlreadySelected || false;
     }
 }
 
